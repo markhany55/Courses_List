@@ -1,0 +1,34 @@
+.container {
+  width: 70%;
+  margin: 15%;
+  background-color: white;
+  .contain {
+    p {
+      text-align: center;
+      font-weight: bold;
+      font-size: 25px;
+    }
+    .courses {
+      display: flex;
+      justify-content: space-between;
+      background-color: #eee;
+      width: 500px;
+      margin: 0 8%;
+      margin-bottom: 10px;
+      div {
+        :first-child {
+          width: 110px;
+        }
+        :last-child {
+          width: 110px;
+        }
+      }
+    }
+    form {
+      @extend .courses;
+      input {
+        width: 81%;
+      }
+    }
+  }
+}
