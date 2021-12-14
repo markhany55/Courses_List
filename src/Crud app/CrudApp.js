@@ -8,7 +8,7 @@ const CrudApp =()=>{
     ])
     const show = data.map((ele,id)=>{
 return(ele.edit?
-<div>
+<div className="courses" >
 
 <input type="text" defaultValue={ele.name} onChange={HandelData} />
 <button onClick={()=>HandelUpdateCourse(id)} >Update course</button>
@@ -57,12 +57,13 @@ function HandelData (e){
 function HandelUpdateCourse (index){
     const all = data.map((e,id)=>{
         return(
-            {...e,name:id===index ? editdata.name : e.name
+            {...e,name:id===index ? editdata.name || e.name : e.name
                 ,edit:id === index ? false : e.edit}
             ) 
     })
     setdata(all)
 }
+console.log(data)
     return(
         <div className="container">
 
