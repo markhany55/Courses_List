@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import {useFormik} from 'formik'
 import './CrudApp.scss'
 const CrudApp =()=>{
     const [data,setdata]=useState([
@@ -6,15 +7,25 @@ const CrudApp =()=>{
         {name:"css",edit:false},
         {name:"javascript",edit:false}
     ])
+    const form = useFormik({
+        initialValues:{
+            name:'',
+        },
+        
+    })
     const show = data.map((ele,id)=>{
-return(ele.edit?
-<div className="courses" >
+        return(  ele.edit ?
+<div className="courses"key={id} >
 
-<input type="text" defaultValue={ele.name} onChange={HandelData} />
-<button onClick={()=>HandelUpdateCourse(id)} >Update course</button>
+<form onSubmit={()=>HandelUpdateCourse(id)}>
+
+<input type="text" id="name" onChange={form.handleChange}  />
+<button   >Update course</button>
+</form>
+
+
 </div>        
-:
-<div className="courses" key={id}>
+:   <div className="courses" key={id}>
                 
                 {ele.name}
                 <div>
@@ -23,17 +34,17 @@ return(ele.edit?
                 <button onClick={()=>HandelDelete(ele.name)}>Deletecourse</button>
                 </div>
             </div>
-        )
-    })
+        ) 
+    }) 
     // Add Items
-    const [newdata,setnewdata]=useState({})
-    const HandelInput =(e)=>{
-        setnewdata({...newdata,name:e.target.value})
-}
-const HandelAdd=(e)=>{
-    e.preventDefault()
-    setdata([...data,newdata])
-}
+const formik = useFormik({
+    initialValues:{
+     name:''  
+    },
+    onSubmit:values=>{
+        setdata([...data,{name:values.name}])
+    }
+})
 // Delete Items
 const HandelDelete =(name)=>{
 const alldata=[...data]
@@ -50,28 +61,23 @@ const HandelEdit= (index)=>{
     })
     setdata(all)
 }
-const [editdata,seteditdata]=useState({})
-function HandelData (e){
-    seteditdata({...editdata,name:e.target.value})
-}
 function HandelUpdateCourse (index){
     const all = data.map((e,id)=>{
         return(
-            {...e,name:id===index ? editdata.name || e.name : e.name
+            {...e,name:id===index ? form.values.name || e.name : e.name
                 ,edit:id === index ? false : e.edit}
             ) 
     })
     setdata(all)
 }
-console.log(data)
     return(
         <div className="container">
 
         <div className="contain">
             <p>Courses</p>
             {show}
-            <form onSubmit={HandelAdd}>
-                <input type="text" id="name" onChange={HandelInput}/>
+            <form onSubmit={formik.handleSubmit}>
+                <input type="text" id="name" onChange={formik.handleChange} />
                 <button>Add course</button>
             </form>
         </div>
